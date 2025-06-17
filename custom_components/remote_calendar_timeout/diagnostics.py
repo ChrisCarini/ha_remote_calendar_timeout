@@ -24,6 +24,3 @@ async def async_get_config_entry_diagnostics(
     }
     payload["ics"] = "\n".join(redact_ics(coordinator.ics))
     return payload
-
-def get_timeout(err: ReadTimeout) -> str:
-    return err._request.extensions.get('timeout', {'connect':'No timeout set'}).get('connect', 'No timeout set')

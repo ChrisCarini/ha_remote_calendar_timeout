@@ -13,7 +13,6 @@ from homeassistant.helpers.httpx_client import get_async_client
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import DOMAIN
-from .diagnostics import get_timeout
 from .ics import InvalidIcsException, parse_calendar
 
 type RemoteCalendarConfigEntry = ConfigEntry[RemoteCalendarDataUpdateCoordinator]
@@ -54,7 +53,7 @@ class RemoteCalendarDataUpdateCoordinator(DataUpdateCoordinator[Calendar]):
             raise UpdateFailed(
                 translation_domain=DOMAIN,
                 translation_key="timeout",
-                translation_placeholders={"err": str(err),"timeout_s": get_timeout(err)},
+                translation_placeholders={"err": str(err),"timeout_s": err._request.extensions.get('timeout', {'connect': 'No timeout set'}).get('connect', 'No timeout set')},
             ) from err
         except (HTTPError, InvalidURL) as err:
             raise UpdateFailed(

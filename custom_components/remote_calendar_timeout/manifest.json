@@ -1,7 +1,7 @@
 {
   "domain": "remote_calendar_timeout",
   "name": "Remote Calendar (timeout)",
-  "codeowners": ["@ChrisCarini"],
+  "codeowners": ["@Thomas55555", "@allenporter"],
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/remote_calendar",
   "integration_type": "service",

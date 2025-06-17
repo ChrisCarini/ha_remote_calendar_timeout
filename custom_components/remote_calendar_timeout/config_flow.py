@@ -20,7 +20,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_CALENDAR_NAME): str,
         vol.Required(CONF_URL): str,
-        vol.Required(CONF_TIMEOUT, default=5): str,
+        vol.Required(CONF_TIMEOUT, default=5): int,
     }
 )
 
@@ -61,8 +61,8 @@ class RemoteCalendarConfigFlow(ConfigFlow, domain=DOMAIN):
             res.raise_for_status()
         except ReadTimeout as err:
             errors["base"] = "timeout_connect"
-            from .diagnostics import get_timeout
-            _LOGGER.debug("%s second timeout reached; increase timeout: %s", get_timeout(err), err)
+            _LOGGER.debug("%s second timeout reached; increase timeout: %s",
+                          err._request.extensions.get('timeout', {'connect': 'No timeout set'}).get('connect', 'No timeout set'), err)
         except (HTTPError, InvalidURL) as err:
             errors["base"] = "cannot_connect"
             _LOGGER.debug("An error occurred: %s", err)
