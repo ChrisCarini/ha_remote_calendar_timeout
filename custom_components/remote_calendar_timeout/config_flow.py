@@ -12,7 +12,6 @@ from homeassistant.const import CONF_TIMEOUT, CONF_URL
 from homeassistant.helpers.httpx_client import get_async_client
 
 from .const import CONF_CALENDAR_NAME, DOMAIN
-from .diagnostics import get_timeout
 from .ics import InvalidIcsException, parse_calendar
 
 _LOGGER = logging.getLogger(__name__)
@@ -62,6 +61,7 @@ class RemoteCalendarConfigFlow(ConfigFlow, domain=DOMAIN):
             res.raise_for_status()
         except ReadTimeout as err:
             errors["base"] = "timeout_connect"
+            from .diagnostics import get_timeout
             _LOGGER.debug("%s second timeout reached; increase timeout: %s", get_timeout(err), err)
         except (HTTPError, InvalidURL) as err:
             errors["base"] = "cannot_connect"
